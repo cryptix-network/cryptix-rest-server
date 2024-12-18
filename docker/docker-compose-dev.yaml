@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+  cryptix_explorer:
+    container_name: cryptix_explorer
+    image: cryptixnetwork/cryptix-explorer:latest
+    restart: unless-stopped
+    environment:
+      API_URI: "http://localhost:8000"
+      API_WS_URI: "ws://localhost:8000"
+    ports:
+      - "8080:8080/tcp"
+
+  cryptix_rest_server:
+    container_name: cryptix_rest_server
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.dev
+    restart: unless-stopped
+    command: pipenv run uvicorn main:app --reload --host 0.0.0.0 --port 8000 
+    volumes:
+      - "../:/app"
+    environment:
+      CRYPTIXD_HOST_1: cryptixd:19201
+      SQL_URI: postgresql+asyncpg://postgres:postgres@postgresql:5432/postgres
+    ports:
+      - "8000:8000/tcp"
+    links:
+      - cryptixd
+      - postgresql
+
+  cryptix_db_filler:
+    container_name: cryptix_db_filler
+    image: cryptixnetwork/cryptix-db-filler:latest
+    restart: unless-stopped
+    environment:
+      DEBUG: "true"
+      CRYPTIXD_HOST_1: cryptixd:19201
+      SQL_URI: postgresql://postgres:postgres@postgresql:5432/postgres
+    links:
+      - cryptixd
+      - postgresql
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:14-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432/tcp"
+    volumes:
+      - postgresql:/var/lib/postgresql/data/
+
+  cryptixd:
+    container_name: cryptixd
+    image: cryptixnetwork/cryptixd:latest
+    restart: unless-stopped
+    ports:
+      - "19201:19201/tcp"
+      - "19101:19101/tcp"
+    volumes:
+      - cryptixd:/app/data/
+    command: cryptixd --utxoindex --connect=mainnet-dnsseed-1.cryptix-network.org
+
+volumes:
+  postgresql:
+  cryptixd:
