@@ -14,8 +14,11 @@ if (-not (Test-Path -Path .\venv)) {
 
 
 $env:PYTHONPATH = "$env:PYTHONPATH;C:\your-path\cryptix-rest-server\cryptixd"
+
 $env:CRYPTIXD_HOST_1 = "127.0.0.1:19201"
+
 $env:SQL_URI = "postgresql+asyncpg://postgres:yourpass@localhost:5432/postgres"
+
 $env:VERSION = "$Version"
 
 
