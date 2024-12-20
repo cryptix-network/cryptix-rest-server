@@ -15,12 +15,12 @@ aiocache.logger.setLevel(logging.WARNING)
 
 
 @cached(ttl=120)
-async def get_spr_price():
-    return (await get_spr_market_data())["current_price"]["usd"]
+async def get_cytx_price():
+    return (await get_cytx_market_data())["current_price"]["usd"]
 
 
 @cached(ttl=300)
-async def get_spr_market_data():
+async def get_cytx_market_data():
     global FLOOD_DETECTED
     global CACHE
     if not FLOOD_DETECTED or time.time() - FLOOD_DETECTED > 300:

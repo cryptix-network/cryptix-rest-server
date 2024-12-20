@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from helper import get_spr_price
+from helper import get_cytx_price
 from server import app, cryptixd_client
 
 
@@ -19,10 +19,10 @@ async def get_marketcap(stringOnly: bool = False):
     """
     Get $CYTX price and market cap. Price info is from coingecko.com
     """
-    spr_price = await get_spr_price()
+    cytx_price = await get_cytx_price()
     resp = await cryptixd_client.request("getCoinSupplyRequest")
     mcap = round(
-        float(resp["getCoinSupplyResponse"]["circulatingSompi"]) / 1e8 * spr_price
+        float(resp["getCoinSupplyResponse"]["circulatingSompi"]) / 1e8 * cytx_price
     )
 
     if not stringOnly:
