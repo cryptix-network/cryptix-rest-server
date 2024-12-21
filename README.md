@@ -1,4 +1,4 @@
-#Cryptix Rest Server
+# Cryptix Rest Server
 
 Start with a Bat File / Powershell file or similar:
 
@@ -23,4 +23,6 @@ $env:VERSION = "$Version"
 
 
 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir C:\your-path\cryptix-rest-server
+
+
 
