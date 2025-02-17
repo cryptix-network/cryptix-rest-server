@@ -21,7 +21,7 @@ class BlockdagResponse(BaseModel):
     pruningPointHash: str = (
         "5d32a9403273a34b6551b84340a1459ddde2ae6ba59a47987a6374340ba41d5d",
     )
-    virtualDaaScore: str = "19989141"
+    virtualDaaScore: str = "1790673"
 
 
 @app.get(
